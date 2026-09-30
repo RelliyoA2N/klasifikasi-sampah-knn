@@ -14,3 +14,7 @@ Output/
 
 *.csv
 .DS_Store
+
+Uji/
+Web.zip
+Model/novelty_model.pkl
