@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+
+.venv/
+venv/
+env/
+
+.ipynb_checkpoints/
+
+Web/static/uploads/*
+
+Dataset/
+Output/
+
+*.csv
+.DS_Store

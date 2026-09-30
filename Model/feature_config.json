@@ -1,0 +1,35 @@
+{
+    "image_size": [
+        224,
+        224
+    ],
+    "color_space": "RGB",
+    "histogram": {
+        "channels": 3,
+        "bins_per_channel": 256,
+        "total_features": 768,
+        "normalized": true
+    },
+    "glcm": {
+        "grayscale": true,
+        "levels": 256,
+        "distance": 1,
+        "angle_degree": 0,
+        "symmetric": true,
+        "normed": true,
+        "properties": [
+            "contrast",
+            "correlation",
+            "energy",
+            "homogeneity"
+        ],
+        "total_features": 4
+    },
+    "total_features": 772,
+    "model": {
+        "algorithm": "KNN",
+        "n_neighbors": 4,
+        "metric": "euclidean",
+        "weights": "uniform"
+    }
+}

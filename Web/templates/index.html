@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Klasifikasi Sampah KNN
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f8fafc,
+                    #eef2f7
+                );
+
+            min-height: 100vh;
+
+            color: #1f2937;
+        }
+
+
+        .wrapper {
+            width: 92%;
+            max-width: 1100px;
+
+            margin: 40px auto;
+        }
+
+
+        .header {
+            text-align: center;
+
+            margin-bottom: 32px;
+        }
+
+
+        .header h1 {
+            font-size: 34px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .header p {
+            color: #6b7280;
+
+            font-size: 16px;
+
+            line-height: 1.6;
+        }
+
+
+        .main-card {
+            background: #ffffff;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 12px 35px
+                rgba(0, 0, 0, 0.08);
+
+            padding: 32px;
+        }
+
+
+        .content-grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 32px;
+
+            align-items: center;
+        }
+
+
+        .upload-section {
+            padding: 10px;
+        }
+
+
+        .upload-box {
+            border:
+                2px dashed #cbd5e1;
+
+            border-radius: 16px;
+
+            padding: 35px 20px;
+
+            text-align: center;
+
+            background: #f8fafc;
+
+            transition: 0.3s;
+        }
+
+
+        .upload-box:hover {
+            border-color: #2563eb;
+
+            background: #f1f5ff;
+        }
+
+
+        .upload-icon {
+            font-size: 48px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .upload-box h2 {
+            font-size: 20px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .upload-box p {
+            color: #6b7280;
+
+            margin-bottom: 20px;
+
+            line-height: 1.5;
+        }
+
+
+        input[type="file"] {
+            width: 100%;
+
+            padding: 12px;
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius: 10px;
+
+            background: white;
+
+            margin-bottom: 15px;
+        }
+
+
+        .input-note {
+            margin-top: 5px;
+
+            margin-bottom: 15px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            background: #eff6ff;
+
+            border:
+                1px solid #bfdbfe;
+
+            color: #1e40af;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            text-align: left;
+        }
+
+
+        .confirm-box {
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 8px;
+
+            margin: 15px 0;
+
+            padding: 12px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius: 10px;
+
+            text-align: left;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            color: #374151;
+        }
+
+
+        .confirm-box input {
+            margin-top: 3px;
+
+            cursor: pointer;
+        }
+
+
+        .btn {
+            width: 100%;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+
+        .btn:hover {
+            background: #1d4ed8;
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        .preview-section {
+            min-height: 360px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #f8fafc;
+
+            border-radius: 16px;
+
+            padding: 20px;
+        }
+
+
+        .preview-section img {
+            width: 100%;
+
+            max-height: 320px;
+
+            object-fit: contain;
+
+            border-radius: 14px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .placeholder {
+            text-align: center;
+
+            color: #94a3b8;
+        }
+
+
+        .placeholder .icon {
+            font-size: 56px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .result-box {
+            width: 100%;
+
+            padding: 16px;
+
+            border-radius: 12px;
+
+            background: #ecfdf5;
+
+            border:
+                1px solid #a7f3d0;
+
+            text-align: center;
+        }
+
+
+        .result-title {
+            font-size: 14px;
+
+            color: #6b7280;
+
+            margin-bottom: 5px;
+        }
+
+
+        .result-value {
+            font-size: 26px;
+
+            font-weight: bold;
+
+            color: #065f46;
+        }
+
+
+        .error-box {
+            margin-top: 18px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            background: #fef2f2;
+
+            color: #b91c1c;
+
+            border:
+                1px solid #fecaca;
+
+            font-size: 14px;
+        }
+
+
+        .info-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+
+            margin-top: 25px;
+        }
+
+
+        .info-card {
+            padding: 18px;
+
+            border-radius: 12px;
+
+            background: #f8fafc;
+
+            text-align: center;
+        }
+
+
+        .info-card strong {
+            display: block;
+
+            font-size: 18px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .info-card span {
+            font-size: 13px;
+
+            color: #6b7280;
+        }
+
+
+        .footer {
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+        }
+
+
+        @media (max-width: 768px) {
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+
+            .main-card {
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="wrapper">
+
+    <!-- Header -->
+    <div class="header">
+
+        <h1>
+            Klasifikasi Sampah
+            Organik dan Anorganik
+        </h1>
+
+        <p>
+            Upload citra sampah untuk melakukan
+            klasifikasi menggunakan algoritma
+            K-Nearest Neighbor.
+        </p>
+
+    </div>
+
+
+    <!-- Main Card -->
+    <div class="main-card">
+
+        <div class="content-grid">
+
+
+            <!-- Upload -->
+            <div class="upload-section">
+
+                <div class="upload-box">
+
+                    <div class="upload-icon">
+                        ♻
+                    </div>
+
+                    <h2>
+                        Upload Gambar Sampah
+                    </h2>
+
+                    <p>
+                        Pilih citra sampah yang
+                        ingin diklasifikasikan.
+                    </p>
+
+
+                    <form
+                        method="POST"
+                        enctype="multipart/form-data"
+                    >
+
+                        <input
+                            type="file"
+                            name="gambar"
+                            accept="image/*"
+                            required
+                        >
+
+
+                        <div class="input-note">
+
+                            <strong>
+                                Catatan:
+                            </strong>
+
+                            Sistem ini hanya digunakan
+                            untuk mengklasifikasikan
+                            citra sampah ke dalam
+                            kategori Organik atau
+                            Anorganik.
+
+                        </div>
+
+
+                        <label class="confirm-box">
+
+                            <input
+                                type="checkbox"
+                                name="konfirmasi_sampah"
+                                required
+                            >
+
+                            <span>
+                                Saya memastikan bahwa
+                                gambar yang diunggah
+                                merupakan citra sampah.
+                            </span>
+
+                        </label>
+
+
+                        <button
+                            type="submit"
+                            class="btn"
+                        >
+                            Klasifikasikan Gambar
+                        </button>
+
+                    </form>
+
+
+                    {% if error %}
+
+                    <div class="error-box">
+                        {{ error }}
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Informasi Model -->
+                <div class="info-grid">
+
+                    <div class="info-card">
+
+                        <strong>
+                            224 × 224
+                        </strong>
+
+                        <span>
+                            Ukuran citra
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-card">
+
+                        <strong>
+                            772
+                        </strong>
+
+                        <span>
+                            Total fitur
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-card">
+
+                        <strong>
+                            K = 4
+                        </strong>
+
+                        <span>
+                            Model KNN
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Preview -->
+            <div class="preview-section">
+
+
+                {% if image_url %}
+
+                <img
+                    src="{{ image_url }}"
+                    alt="Gambar sampah yang diunggah"
+                >
+
+
+                {% if hasil %}
+
+                <div class="result-box">
+
+                    <div class="result-title">
+                        Hasil Prediksi
+                    </div>
+
+                    <div class="result-value">
+                        {{ hasil }}
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                {% else %}
+
+                <div class="placeholder">
+
+                    <div class="icon">
+                        🖼
+                    </div>
+
+                    <p>
+                        Gambar yang diunggah
+                        akan tampil di sini.
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        Sistem Klasifikasi Sampah
+        Berbasis Citra Digital
+        Menggunakan KNN
+    </div>
+
+</div>
+
+</body>
+
+</html>
